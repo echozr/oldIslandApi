@@ -1,0 +1,36 @@
+{
+  "name": "oldisland_api",
+  "version": "1.0.0",
+  "description": "旧岛小时光（小程序）服务端API接口",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development nodemon src/app.js --watch src ",
+    "start": "cross-env NODE_ENV=production node src/app.js "
+  },
+  "keywords": [
+    "oldIsland"
+  ],
+  "author": "zr",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/register": "^7.10.4",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-json-error": "^3.1.2",
+    "koa-router": "^9.1.0",
+    "lodash": "^4.17.19",
+    "mysql2": "^2.1.0",
+    "require-directory": "^2.1.1",
+    "sequelize": "^6.3.3",
+    "validator": "^13.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "nodemon": "^2.0.4"
+  }
+}
