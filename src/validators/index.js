@@ -4,6 +4,7 @@
  */
 
 const { LinValidator, Rule } = require('../core/lin-validator')
+const { LoginType } = require('../lib/enum')
 
 
 /**
@@ -15,7 +16,9 @@ class positiveIntegerValidator extends LinValidator {
     this.id = [new Rule('isInt', '该参数必须为正整数', { min: 1 })]
   }
 }
-
+/**
+ * 校验注册参数
+ */
 class RegisterValidator extends LinValidator {
   constructor() {
     super()
@@ -35,8 +38,29 @@ class RegisterValidator extends LinValidator {
   }
 }
 
+/**
+ * 校验登录参数
+ */
+class LoginValidator extends LinValidator {
+  constructor() {
+    super()
+    this.account = [new Rule('isLength', '不符合账号规范', { min: 4, max: 32 })] // 这里账号 普通用户代表email  小程序用户代表 登录返回的code
+    this.password = [new Rule('isOptional'), new Rule('isLength', '至少6个字符', { min: 6, max: 128 })] // 密码非必填，如果填了需要满足第二条验证
+  }
+  // 自定义验证登录类型
+  validateType(values) {
+    const Type = values.body.type
+    if (!Type) {
+      throw new Error('type是必填参数')
+    }
+    if (!LoginType.isThisType(Number(Type))) {
+      throw new Error('参数类型不正确')
+    }
+  }
+}
 
 module.exports = {
   positiveIntegerValidator,
-  RegisterValidator
+  RegisterValidator,
+  LoginValidator
 }

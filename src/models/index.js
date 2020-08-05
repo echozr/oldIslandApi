@@ -5,14 +5,17 @@
 
 // 引用
 const users = require('./users')
+const popular= require('./popular')
+const books=require('./books')
 
 
 // 外键关系
 
 
 
-
 // 导出
 module.exports = {
-  users
+  users,
+  popular,
+  books
 }

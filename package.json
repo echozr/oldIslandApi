@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development nodemon src/app.js --watch src ",
+    "dev": "cross-env NODE_ENV=development nodemon --inspect=9229 src/app.js --watch src ",
     "start": "cross-env NODE_ENV=production node src/app.js "
   },
   "keywords": [
@@ -19,10 +19,16 @@
     "@babel/node": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.4",
+    "bcryptjs": "^2.4.3",
+    "formidable-upload-koa": "^1.0.1",
+    "fs-extra": "^9.0.1",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
     "koa-json-error": "^3.1.2",
     "koa-router": "^9.1.0",
+    "koa-static": "^5.0.0",
     "lodash": "^4.17.19",
     "mysql2": "^2.1.0",
     "require-directory": "^2.1.1",

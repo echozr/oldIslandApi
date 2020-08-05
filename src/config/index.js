@@ -36,7 +36,16 @@ if (isPord) {
 
 
 let config = {
-  mysqlConfig
+  mysqlConfig,
+  security: {
+    secretKey: '@SuAN%He8H12djh@sFJu~2*&.P,&1!',
+    expiresIn: '1d'
+  },
+  wxConfig: {
+    appID:'wx5d8d7b0ab05689f5',
+    appSecret:'6693041196b2f537a44cd0fce53b11d4',
+    url:'https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code'
+  }
 }
 
 module.exports = config
