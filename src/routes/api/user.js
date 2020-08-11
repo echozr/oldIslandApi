@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const { RegisterValidator,LoginValidator } = require('../../validators')
 const { resisterUser,LoginByType } = require('../../controllers/users')
 const { LoginType } = require('../../lib/enum')
-const router = new Router({ prefix: '/api/user' })
+const router = new Router({ prefix: '/user' })
 
 // 注册
 router.post('/register', async (ctx, next) => {

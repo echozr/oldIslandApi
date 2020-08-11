@@ -14,8 +14,13 @@ const ArtType = {
   MOVIE: 100,
   MUSIC: 200,
   SENTENCE: 300,
+  VIDEO:500,
   BOOK: 400,
   isThisType
+}
+
+const ROOT={
+  ADMIN:8
 }
 
 function isThisType(val) {
@@ -25,5 +30,6 @@ function isThisType(val) {
 
 module.exports={
   LoginType,
-  ArtType
+  ArtType,
+  ROOT
 }

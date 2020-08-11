@@ -53,12 +53,12 @@ const LoginByType = async ({ account, password, type }) => {
   let Token
   switch (Number(type)) {
     case LoginType.USER_EMAIL:
+      user = await emailLogin(account, password)
+      Token = generateToken(user.id, 2)
+      break;
     case LoginType.ADMIN_EMAIL:
       user = await emailLogin(account, password)
-      // if (user instanceof ErrorModel) {
-      //   return user
-      // }
-      Token = generateToken(user.id, 2)
+      Token = generateToken(user.id, 10)
       break;
     case LoginType.USER_MINI_PROGRAM:
       return Token = 'A'

@@ -26,5 +26,9 @@ module.exports = errorInfo = {
   uploadFileSizeFailInfo:{
     msg:'上传文件过大',
     errorCode:20000
+  },
+  popularCreateFile:{
+    msg:'新增流行内容失败',
+    errorCode:30001
   }
 }

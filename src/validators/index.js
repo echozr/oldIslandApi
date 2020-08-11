@@ -1,3 +1,4 @@
+const { isLength } = require('lodash')
 /**
  * @description 自定义校验器
  * @author zr
@@ -59,8 +60,20 @@ class LoginValidator extends LinValidator {
   }
 }
 
+class addPoplar extends LinValidator{
+  constructor(){
+    super()
+    this.addType=[new Rule('isLength','类型不能为空')]
+    this.creationTime=[new Rule('isLength','创建时间不能为空')]
+    this.bgImage=[new Rule('isLength','背景图不能为空')]
+    this.title=[new Rule('isLength','标题长度必须要大于2个字，小于30个字',{min:2,max:30})]
+    this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:10,max:200})]
+  }
+}
+
 module.exports = {
   positiveIntegerValidator,
   RegisterValidator,
-  LoginValidator
+  LoginValidator,
+  addPoplar
 }

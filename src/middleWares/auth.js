@@ -5,12 +5,13 @@
 const jwt = require('jsonwebtoken')
 const { secretKey } = require('../config').security
 const { ParameterException } = require('../core/http-exception')
+const { ROOT } = require('../lib/enum')
 /**
  * 获取请求头中是否携带token判断是否有访此页面的权限
  * @param {object} ctx 
  * @param {object} next 
  */
-const auth = async (ctx, next, level) => {
+const auth = async (ctx, next) => {
   debugger
   // 获取请求头信息
   const { authorization = '' } = ctx.request.header
@@ -28,13 +29,21 @@ const auth = async (ctx, next, level) => {
     errorMsg = err.name === 'TokenExpiredError' ? 'token已过期' : 'token不合法'
     throw new ParameterException(errorMsg, 10006)
   }
-  // 权限设置
-  // const level = level || 1
-  // if(ctx.state.user.权限<level){
-  //   throw new ParameterException('权限不足', 10006)
-  // }
   await next()
 }
+/**
+ * 只有管理员才能调用此方法
+ * @param {*} ctx  object 对象
+ * @param {*} next 
+ */
+const rootAdmin = async (ctx,next)=>{
+    // 权限设置
+    if (ctx.state.user.scope < ROOT.ADMIN) {
+      throw new ParameterException('权限不足', 10006)
+    }
+    await next()
+}
 module.exports = {
-  auth
+  auth,
+  rootAdmin
 }

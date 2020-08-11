@@ -41,7 +41,6 @@ async function saveFile(ctx, { name, type, size, filePath }) {
   // 返回数据信息
   const url=ctx.request.header.host
   return new SuccessModel({
-    path:DIS_FOLDER_PATH,
     url:`http://${url}/${getUploadDirName()}/${fileName}`
   })
 }

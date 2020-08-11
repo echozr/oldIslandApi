@@ -9,32 +9,32 @@ const { DataTypes } = require('sequelize')
 const popular = seq.define('popular', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull:false,
     comment: '标题'
   },
   content: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull:false,
     comment: '内容'
   },
   addType: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull:false,
     comment: '类型'
   },
   creationTime: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull:false,
     comment: '创建时间'
   },
   bgImage:{
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull:false,
     comment: '插入图片'
   },
   resources:{
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull:true,
     comment: '视频音频资源'
   }
 })
