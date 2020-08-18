@@ -30,5 +30,13 @@ module.exports = errorInfo = {
   popularCreateFile:{
     msg:'新增流行内容失败',
     errorCode:30001
+  },
+  deletePopularFailInfo:{
+    msg:'删除流行内容失败',
+    errorCode:30002
+  },
+  getPopularListFail:{
+    msg:'获取流行数据失败',
+    errorCode:30003
   }
 }

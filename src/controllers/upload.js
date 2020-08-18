@@ -11,7 +11,10 @@ const { getUploadDirName, getUploadFileExt } = require('../core/tools')
 // 文件最大体积
 const MAX_SIZE = 1024 * 1024 * 100 //100M
 // 存储文件目录
-const DIS_FOLDER_PATH = path.join(__dirname,'..','..', `public/upload/${getUploadDirName()}`)
+const DIS_FOLDER_PATH = path.join(__dirname, '..', '..', `public/upload/${getUploadDirName()}`)
+
+//附件根目录
+const DIS_FOLDER_ROOT_PATH = path.join(__dirname, '..', '..', 'public/upload')
 // 判断上传存储目录，目录不存在创建目录
 fse.pathExists(DIS_FOLDER_PATH).then(exist => {
   if (!exist) {
@@ -32,19 +35,46 @@ async function saveFile(ctx, { name, type, size, filePath }) {
   if (size > MAX_SIZE) {
     // 删掉文件，防治占用系统资源大小
     await fse.remove(filePath)
-    return ErrorModel(errorInfo.uploadFileSizeFailInfo)
+    return new ErrorModel(errorInfo.uploadFileSizeFailInfo)
   }
   // 移动文件到制定目录下
-  const fileName = Date.now() + '.' + name // 防止重名，名称前加随机时间戳
+  const fileName = `upload.${Date.now()}_${name}` // 防止重名，名称前加随机时间戳
   const distFilePath = path.join(DIS_FOLDER_PATH, fileName)
-  await fse.move(filePath,distFilePath)
+  await fse.move(filePath, distFilePath)
   // 返回数据信息
-  const url=ctx.request.header.host
+  const url = ctx.request.header.host
   return new SuccessModel({
-    url:`http://${url}/${getUploadDirName()}/${fileName}`
+    url: `http://${url}/${getUploadDirName()}/${fileName}`
   })
 }
 
-module.exports={
-  saveFile
+
+/**
+ * 删除附件
+ * @param {*} path 必传参数可以是文件夹可以是文件
+ * @param {*} reservePath 保存path目录 path值与reservePath值一样就保存
+ */
+const delFile = async (ctx, reservePath) => {
+  const url = ctx.request.header.host
+  const topUrl = `http://${url}/`
+  const path = reservePath.split(topUrl)[1]
+  const filePath = path.replace(/\//g, '\\')
+  const deletePath = `${DIS_FOLDER_ROOT_PATH}\\${filePath}`
+  const deleteFolder = deletePath.split("\\upload.")[0]
+  const readDir = fse.readdirSync(deleteFolder)
+  if (readDir.length > 0) {
+    fse.unlinkSync(deletePath)
+    const delDir = fse.readdirSync(deleteFolder)
+    if(delDir.length==0){
+      fse.rmdirSync(deleteFolder);
+    }
+  } else {
+    fse.rmdirSync(deleteFolder);
+  }
+
+}
+
+module.exports = {
+  saveFile,
+  delFile
 }

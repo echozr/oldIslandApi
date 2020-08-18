@@ -59,7 +59,12 @@ class LoginValidator extends LinValidator {
     }
   }
 }
-
+/**
+ *
+ * 新增popular验证
+ * @class addPoplar
+ * @extends {LinValidator}
+ */
 class addPoplar extends LinValidator{
   constructor(){
     super()
@@ -70,10 +75,47 @@ class addPoplar extends LinValidator{
     this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:10,max:200})]
   }
 }
+/**
+ *
+ * 获取popularList  分页参数
+ * @class getPopularList
+ * @extends {LinValidator}
+ */
+class getPopularList extends LinValidator{
+  constructor(){
+    super()
+    this.start = [
+      new Rule('isInt', '不符合规范', { min: 0, max: 60000 }),
+      new Rule('isOptional', '', 0)
+    ]
+    this.count = [
+      new Rule('isInt', '不符合规范', { min: 1, max: 100 }),
+      new Rule('isOptional', '', 10)
+    ]
+  }
+}
+
+class PositiveIntegerValidator extends LinValidator {
+  constructor() {
+    super()
+    this.id = [new Rule('isInt', '需要正整数', { min: 1 })]
+  }
+}
+class AddShortIdValidator extends PositiveIntegerValidator {
+  constructor() {
+    super()
+    this.id = [
+      new Rule('isLength', '必填参数', { min: 1, max: 12 }),
+      new Rule('isInt', '必须为数值', { min: 1, max: 9999999})
+    ]
+  }
+}
 
 module.exports = {
   positiveIntegerValidator,
   RegisterValidator,
   LoginValidator,
-  addPoplar
+  addPoplar,
+  getPopularList,
+  AddShortIdValidator
 }
