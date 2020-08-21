@@ -63,7 +63,7 @@ router.get('/getAppletsPopular', auth, async (ctx, next) => {
   // 获取参数
   const { time } = ctx.request.body
   // 获取返回值结果
-  ctx.body = await getAppletsPopular(time)
+  ctx.body = await getAppletsPopular(time,ctx)
 
 })
 

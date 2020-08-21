@@ -3,7 +3,7 @@
  * @author zr
  */
 const sequelize = require('sequelize')
-const { popular } = require('../models')
+const { popular, praise } = require('../models')
 const { delFile } = require('../controllers/upload')
 
 /**
@@ -68,7 +68,6 @@ const findPopList = async ({ type, time, start, count }) => {
   }
 }
 
-
 /**
  * 根据Id 删除相关内容及附件
  * @param {number} id 数据id
@@ -102,7 +101,16 @@ const getPopInfo = async (id) => {
   return result
 }
 
-
+/**
+ * 更新流行模块的元素
+ * @param {number} popId popularId
+ * @param {number} addType 新增类型
+ * @param {string} bgImage 背景图
+ * @param {string} title 标题
+ * @param {string} resources 资源
+ * @param {string} content 内容
+ * @param {string} creationTime 创建时间
+ */
 const updatePopInfo = async ({ popId, addType, bgImage, title, resources, content, creationTime }) => {
   // 拼接查询条件
   const whereOpt = {
@@ -128,8 +136,9 @@ const updatePopInfo = async ({ popId, addType, bgImage, title, resources, conten
 /**
  * 小程序获取流行首页
  * @param {string} time 查询时间
+ * @param {string} userId 查询时间
  */
-const findAppLetsPopList = async (time) => {
+const findAppLetsPopList = async (time, userId) => {
   debugger
   const whereOpt = {}
   if (time) {
@@ -139,10 +148,26 @@ const findAppLetsPopList = async (time) => {
     const startTime = newTime.dataValues.creationTime
     Object.assign(whereOpt, { creationTime: startTime })
   }
-  const result = await popular.findAll({
+  const result = await popular.findAndCountAll({
     where: whereOpt,
-    order: [['id', 'DESC']]
+    order: [['id', 'DESC']],
+    attributes: ['id', 'title', 'content', 'addType', 'creationTime', 'bgImage', 'resources'],
+    include: [
+      {
+        model: praise,
+        attributes: ['userId', 'popularId']
+      }
+    ]
   })
+  const list = result.rows.map(v => {
+    const item = v.dataValues
+    const praiseNum = item.praises.length
+    const isCheck = item.praises.filter(x => x.dataValues.userId === userId)
+    v.dataValues.praises = praiseNum
+    v.dataValues.isCheck = isCheck.length > 0 ? true : false
+    return v.dataValues
+  })
+
   return result
 
 }

@@ -109,14 +109,13 @@ const updatePopular = async ({ popId, addType, bgImage, title, resources, conten
   return new ErrorModel(errorInfo.popularCreateFile)
 }
 
-
-
 /**
  * 小程序获取流行首页的当月数据
  * @param {string} time 查询时间
  */
-const getAppletsPopular = async (time) => {
-  const result = await findAppLetsPopList(time)
+const getAppletsPopular = async (time,ctx) => {
+  const userId = ctx.state.user.uid
+  const result = await findAppLetsPopList(time,userId)
   if (result) {
     return new SuccessModel(result)
   }
