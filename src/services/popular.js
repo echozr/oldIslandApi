@@ -85,9 +85,50 @@ const destroyPopular = async (id, ctx) => {
   });
   console.log(result)
   return result
-
 }
 
+/**
+ * 根据Id获取流行的详情页
+ * @param {number} id 数据id
+ */
+const getPopInfo = async (id) => {
+  const whereOpt = {
+    id
+  }
+  const result = await popular.findOne({
+    where: whereOpt
+  })
+  console.log(result)
+  return result
+}
+
+
+const updatePopInfo = async ({ popId, addType, bgImage, title, resources, content, creationTime }) => {
+  // 拼接查询条件
+  const whereOpt = {
+    id: popId
+  }
+  // 拼接更新字段
+  const updateData = {
+    addType,
+    bgImage,
+    title,
+    resources,
+    content,
+    creationTime
+  }
+  // 执行数据库操作
+  const result = await popular.update(updateData, {
+    where: whereOpt
+  })
+  console.log(result)
+  return result
+}
+
+/**
+ * 小程序获取流行首页
+ * @param {string} time 查询时间
+ */
 const findAppLetsPopList = async (time) => {
   debugger
   const whereOpt = {}
@@ -109,5 +150,7 @@ module.exports = {
   createdPopular,
   findPopList,
   destroyPopular,
+  getPopInfo,
+  updatePopInfo,
   findAppLetsPopList
 }

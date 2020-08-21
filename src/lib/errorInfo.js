@@ -38,5 +38,13 @@ module.exports = errorInfo = {
   getPopularListFail:{
     msg:'获取流行数据失败',
     errorCode:30003
+  },
+  addPraiseFail:{
+    msg:'点赞失败，请重试',
+    errorCode:40001
+  },
+  cancelPraiseFail:{
+    msg:'取消失败，请重试',
+    errorCode:40002
   }
 }

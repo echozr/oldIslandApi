@@ -6,8 +6,7 @@
 const { SuccessModel, ErrorModel } = require('../core/http-exception')
 const errorInfo = require('../lib/errorInfo')
 const { ArtType } = require('../lib/enum')
-const { createdPopular, findPopList, destroyPopular,findAppLetsPopList } = require('../services/popular')
-const { getPopularList } = require('../validators')
+const { createdPopular, findPopList, destroyPopular, getPopInfo, findAppLetsPopList,updatePopInfo } = require('../services/popular')
 
 /**
  * 添加流行模块的元素
@@ -76,25 +75,59 @@ const deletePopular = async (id, ctx) => {
     return new SuccessModel({ msg: '删除成功' })
   }
   return new ErrorModel(errorInfo.deletePopularFailInfo)
-
 }
+
+
+/**
+ * 根据id获取用户详情信息
+ * @param {number} id popularID
+ */
+const getPopularInfo = async (id) => {
+  const result = await getPopInfo(id)
+  if (result) {
+    return new SuccessModel(result)
+  }
+  return new ErrorModel(errorInfo.getPopularListFail)
+}
+
+/**
+ * 更新流行模块的元素
+ * @param {number} popId popularId
+ * @param {number} addType 新增类型
+ * @param {string} bgImage 背景图
+ * @param {string} title 标题
+ * @param {string} resources 资源
+ * @param {string} content 内容
+ * @param {string} creationTime 创建时间
+ */
+const updatePopular = async ({ popId, addType, bgImage, title, resources, content, creationTime }) => {
+  debugger
+  const result = await updatePopInfo({ popId, addType, bgImage, title, resources, content, creationTime })
+  if (result) {
+    return new SuccessModel({msg:'更新成功'})
+  }
+  return new ErrorModel(errorInfo.popularCreateFile)
+}
+
+
 
 /**
  * 小程序获取流行首页的当月数据
  * @param {string} time 查询时间
  */
 const getAppletsPopular = async (time) => {
-  const result= await findAppLetsPopList(time)
-  if(result){
+  const result = await findAppLetsPopList(time)
+  if (result) {
     return new SuccessModel(result)
   }
   return new ErrorModel(errorInfo.getPopularListFail)
-
 }
 
 module.exports = {
   addPopular,
   getAdminPopList,
   deletePopular,
-  getAppletsPopular
+  getAppletsPopular,
+  getPopularInfo,
+  updatePopular
 }

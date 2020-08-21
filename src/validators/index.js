@@ -1,4 +1,5 @@
 const { isLength } = require('lodash')
+const linValidator = require('../core/lin-validator')
 /**
  * @description 自定义校验器
  * @author zr
@@ -72,7 +73,7 @@ class addPoplar extends LinValidator{
     this.creationTime=[new Rule('isLength','创建时间不能为空')]
     this.bgImage=[new Rule('isLength','背景图不能为空')]
     this.title=[new Rule('isLength','标题长度必须要大于2个字，小于30个字',{min:2,max:30})]
-    this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:10,max:200})]
+    this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:5,max:200})]
   }
 }
 /**
@@ -94,7 +95,11 @@ class getPopularList extends LinValidator{
     ]
   }
 }
-
+/**
+ * 判断Id 是正整数
+ * @class PositiveIntegerValidator
+ * @extends {LinValidator}
+ */
 class PositiveIntegerValidator extends LinValidator {
   constructor() {
     super()
@@ -111,11 +116,32 @@ class AddShortIdValidator extends PositiveIntegerValidator {
   }
 }
 
+class PraiseTypeValidator extends LinValidator{
+  constructor(props) {
+    super(props)
+    this.type = [new Rule('isLength', '必填参数', { min: 1 })]
+  }
+  
+}
+
+class PraiseValidator extends PraiseTypeValidator {
+  constructor(){
+    super()
+    this.popularId = [
+      new Rule('isLength', '必填参数', { min: 1, max: 12 }),
+      new Rule('isInt', '需要正整数', { min: 1 })
+    ]
+    
+  }
+}
+
 module.exports = {
   positiveIntegerValidator,
   RegisterValidator,
   LoginValidator,
   addPoplar,
   getPopularList,
-  AddShortIdValidator
+  AddShortIdValidator,
+  PraiseValidator,
+  PraiseTypeValidator
 }
