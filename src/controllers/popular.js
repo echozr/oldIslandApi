@@ -19,6 +19,7 @@ const { createdPopular, findPopList, destroyPopular, getPopInfo, findAppLetsPopL
  */
 const addPopular = async ({ addType, bgImage, title, resources, content, creationTime }) => {
   // 判断新增类型
+  debugger
   switch (Number(addType)) {
     case ArtType.MOVIE:
     case ArtType.MUSIC:
@@ -30,7 +31,7 @@ const addPopular = async ({ addType, bgImage, title, resources, content, creatio
       if (result) {
         return new SuccessModel(result)
       }
-      return new ErrorModel(errorInfo.popularCreateFile)
+      throw new ErrorModel(errorInfo.popularCreateFile)
       break
     case ArtType.BOOK:
       // 添加电影，音乐，视频，诗句
@@ -47,19 +48,23 @@ const addPopular = async ({ addType, bgImage, title, resources, content, creatio
  * @param {*} count 每页行数
  * 
  */
-const getAdminPopList = async ({ type, time, start, count }) => {
+const getAdminPopList = async ({title, type, time, start, count }) => {
   debugger
   if (start === "" || start === undefined) {
     start = 0
+  }else{
+    start=Number(start)
   }
   if (count === "" || count === undefined) {
     count = 10
+  }else{
+    count=Number(count)
   }
-  const result = await findPopList({ type, time, start, count })
+  const result = await findPopList({title, type, time, start, count })
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel
+  throw new ErrorModel
 
 }
 
@@ -72,9 +77,9 @@ const deletePopular = async (id, ctx) => {
   debugger
   const result = await destroyPopular(id, ctx)
   if (result) {
-    return new SuccessModel({ msg: '删除成功' })
+    return new SuccessModel('删除成功')
   }
-  return new ErrorModel(errorInfo.deletePopularFailInfo)
+  throw new ErrorModel(errorInfo.deletePopularFailInfo)
 }
 
 
@@ -87,7 +92,7 @@ const getPopularInfo = async (id) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.getPopularListFail)
+  throw new ErrorModel(errorInfo.getPopularListFail)
 }
 
 /**
@@ -106,7 +111,7 @@ const updatePopular = async ({ popId, addType, bgImage, title, resources, conten
   if (result) {
     return new SuccessModel({msg:'更新成功'})
   }
-  return new ErrorModel(errorInfo.popularCreateFile)
+  throw new ErrorModel(errorInfo.popularCreateFile)
 }
 
 /**
@@ -119,7 +124,7 @@ const getAppletsPopular = async (time,ctx) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.getPopularListFail)
+  throw new ErrorModel(errorInfo.getPopularListFail)
 }
 
 module.exports = {

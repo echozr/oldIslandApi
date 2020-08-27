@@ -20,7 +20,7 @@ const addPraise = async (ctx, type, popularId) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.addPraiseFail)
+  throw new ErrorModel(errorInfo.addPraiseFail)
 }
 
 /**
@@ -35,7 +35,7 @@ const cancelLike = async (ctx, type, popularId) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.cancelPraiseFail)
+  throw new ErrorModel(errorInfo.cancelPraiseFail)
 }
 
 /**
@@ -61,7 +61,7 @@ const getPraiseList = async (ctx, type) => {
   if(result){
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.addPraiseFail)
+  throw new ErrorModel(errorInfo.addPraiseFail)
 }
 
 module.exports = {

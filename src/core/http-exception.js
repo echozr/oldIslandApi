@@ -38,7 +38,7 @@ class ErrorModel extends Error {
   constructor({msg = '服务器异常', errorCode = 10000}) {
     super()
     this.msg = msg
-    this.errorCode = errorCode
+    this.code = errorCode
   }
 }
 

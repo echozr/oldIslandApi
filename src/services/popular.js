@@ -5,6 +5,8 @@
 const sequelize = require('sequelize')
 const { popular, praise } = require('../models')
 const { delFile } = require('../controllers/upload')
+const {ErrorModel} = require('../core/http-exception')
+const Op = sequelize.Op;
 
 /**
  * 创建popular除书籍外的所有数据
@@ -16,7 +18,6 @@ const { delFile } = require('../controllers/upload')
  * @param {*} creationTime
  */
 const createdPopular = async ({ addType, bgImage, title, resources, content, creationTime }) => {
-  debugger
   const whereOpt = {
     addType: addType,
     bgImage: bgImage,
@@ -24,13 +25,25 @@ const createdPopular = async ({ addType, bgImage, title, resources, content, cre
     content: content,
     creationTime: creationTime
   }
+  debugger
   if (resources) {
     Object.assign(whereOpt, { resources: resources })
   }
+
+   // 判断该书籍是否存在数据库中
+  const data = await popular.findAll({
+    where:whereOpt
+  })
+
+  if (data.length > 0) {
+    throw new ErrorModel({msg:"该期刊已存在，请勿重复添加"})
+  }
+
   const result = await popular.create(
     whereOpt
   )
-  return result.dataValues
+  if( result.dataValues)
+  return '添加成功'
 
 }
 /**
@@ -41,8 +54,12 @@ const createdPopular = async ({ addType, bgImage, title, resources, content, cre
  * @param {*} count 每页行数
  * 
  */
-const findPopList = async ({ type, time, start, count }) => {
+const findPopList = async ({title, type, time, start, count }) => {
+  debugger
   const whereOpt = {}
+  if(title){
+    Object.assign(whereOpt,{ title: {  [Op.like]: `%${title}%` }})
+  }
   if (type) {
     Object.assign(whereOpt, { addType: type })
   }
@@ -56,7 +73,7 @@ const findPopList = async ({ type, time, start, count }) => {
     order: [
       ['id', 'desc']
     ],
-    attributes: ['id', 'title', 'addType', 'creationTime'],
+    attributes: ['id', 'title', 'content','addType', 'creationTime'],
   })
   console.log(result)
   const list = result.rows.map(v => v.dataValues)
@@ -74,7 +91,10 @@ const findPopList = async ({ type, time, start, count }) => {
  * @param {object} ctx 对象
  */
 const destroyPopular = async (id, ctx) => {
-  const result1 = await popular.findOne({ where: { id } });
+  const result1 = await popular.findOne({ where: { id } })
+  if(!result1){
+    return 
+  }
   await delFile(ctx, result1.dataValues.bgImage)
   await delFile(ctx, result1.dataValues.resources)
   const result = await popular.destroy({

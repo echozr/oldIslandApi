@@ -18,7 +18,7 @@ const getUser = async (email, openId) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.getUserFail)
+  throw new ErrorModel(errorInfo.getUserFail)
 }
 
 /**
@@ -30,7 +30,7 @@ const getUser = async (email, openId) => {
 const resisterUser = async ({ email, password, nickname }) => {
   const user = await getUserByInfo(email)
   if (user) {
-    return new ErrorModel(errorInfo.emailAlreadyExists)
+    throw new ErrorModel(errorInfo.emailAlreadyExists)
   }
   //密码加密
   const salt = bcrypt.genSaltSync(10)
@@ -40,7 +40,7 @@ const resisterUser = async ({ email, password, nickname }) => {
   if (result) {
     return new SuccessModel(result)
   }
-  return new ErrorModel(errorInfo.registerFail)
+  throw new ErrorModel(errorInfo.registerFail)
 }
 
 /**
@@ -64,7 +64,7 @@ const LoginByType = async ({ account, password, type }) => {
       return Token = 'A'
       break
     default:
-      return new ErrorModel({ "msg": "没有响应的处理函数" })
+      throw new ErrorModel({ "msg": "没有响应的处理函数" })
       break;
   }
   return new SuccessModel(Token)

@@ -8,8 +8,7 @@ const { DataTypes } = require('sequelize')
 // 创建数据表 popular
 const popular = seq.define('popular', {
   title: {
-    type: DataTypes.STRING,
-    allowNull:false,
+    type: DataTypes.STRING, 
     comment: '标题'
   },
   content: {
@@ -35,7 +34,8 @@ const popular = seq.define('popular', {
   resources:{
     type: DataTypes.STRING,
     allowNull:true,
-    comment: '视频音频资源'
+    comment: '视频音频资源',
+    defaultValue:''
   }
 })
 

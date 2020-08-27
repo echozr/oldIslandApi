@@ -1,5 +1,5 @@
 /**
- * @description  点在相关接口数据库操作
+ * @description  点赞相关接口数据库操作
  * @author zr
  */
 const sequelize = require('sequelize')

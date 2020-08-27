@@ -35,7 +35,7 @@ async function saveFile(ctx, { name, type, size, filePath }) {
   if (size > MAX_SIZE) {
     // 删掉文件，防治占用系统资源大小
     await fse.remove(filePath)
-    return new ErrorModel(errorInfo.uploadFileSizeFailInfo)
+    throw new ErrorModel(errorInfo.uploadFileSizeFailInfo)
   }
   // 移动文件到制定目录下
   const fileName = `upload.${Date.now()}_${name}` // 防止重名，名称前加随机时间戳
@@ -55,8 +55,12 @@ async function saveFile(ctx, { name, type, size, filePath }) {
  * @param {*} reservePath 保存path目录 path值与reservePath值一样就保存
  */
 const delFile = async (ctx, reservePath) => {
+  debugger
   const url = ctx.request.header.host
   const topUrl = `http://${url}/`
+  if (reservePath.indexOf(topUrl) < 0) {
+    return
+  }
   const path = reservePath.split(topUrl)[1]
   const filePath = path.replace(/\//g, '\\')
   const deletePath = `${DIS_FOLDER_ROOT_PATH}\\${filePath}`
@@ -65,13 +69,12 @@ const delFile = async (ctx, reservePath) => {
   if (readDir.length > 0) {
     fse.unlinkSync(deletePath)
     const delDir = fse.readdirSync(deleteFolder)
-    if(delDir.length==0){
+    if (delDir.length == 0) {
       fse.rmdirSync(deleteFolder);
     }
   } else {
     fse.rmdirSync(deleteFolder);
   }
-
 }
 
 module.exports = {

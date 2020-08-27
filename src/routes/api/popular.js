@@ -17,9 +17,10 @@ router.post('/addPopular', auth, rootAdmin, async (ctx, next) => {
 //根据类型、时间、分页查询popular列表
 router.get('/getPopularList', auth, rootAdmin, async (ctx, next) => {
   // 获取参数
-  const { type, time, start, count } = ctx.request.body
+  debugger
+  const { title, type, time, start, count } = ctx.query
   // 获取返回值结果
-  ctx.body = await getAdminPopList({ type, time, start, count })
+  ctx.body = await getAdminPopList({ title, type, time, start, count })
 })
 
 // 删除popular
@@ -28,7 +29,7 @@ router.delete('/deletePopular', auth, rootAdmin, async (ctx, next) => {
   //验证参数
   const v = await new AddShortIdValidator().validate(ctx)
   //获取参数
-  const { id } = ctx.request.body
+  const { id } = ctx.query
   // 删除方法
   ctx.body = await deletePopular(id, ctx)
 })
@@ -51,7 +52,7 @@ router.post('/updatePopular', auth, rootAdmin, async (ctx, next) => {
   const v = await new addPoplar().validate(ctx)
   const d = await new AddShortIdValidator().validate(ctx)
   //获取参数
-  const { id:popId, addType, bgImage, title, resources, content, creationTime } = ctx.request.body
+  const { id: popId, addType, bgImage, title, resources, content, creationTime } = ctx.request.body
   //获取返回结果
   ctx.body = await updatePopular({ popId, addType, bgImage, title, resources, content, creationTime })
 })
@@ -63,7 +64,7 @@ router.get('/getAppletsPopular', auth, async (ctx, next) => {
   // 获取参数
   const { time } = ctx.request.body
   // 获取返回值结果
-  ctx.body = await getAppletsPopular(time,ctx)
+  ctx.body = await getAppletsPopular(time, ctx)
 
 })
 

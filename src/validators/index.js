@@ -134,6 +134,19 @@ class PraiseValidator extends PraiseTypeValidator {
     
   }
 }
+/**
+ *
+ * 新增popular验证
+ * @class addPoplar
+ * @extends {LinValidator}
+ */
+class addBook extends addPoplar{
+  constructor(){
+    super()
+    this.author=[new Rule('isLength','作者不能为空')]
+    this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:5,max:5000})]
+  }
+}
 
 module.exports = {
   positiveIntegerValidator,
@@ -143,5 +156,6 @@ module.exports = {
   getPopularList,
   AddShortIdValidator,
   PraiseValidator,
-  PraiseTypeValidator
+  PraiseTypeValidator,
+  addBook
 }
