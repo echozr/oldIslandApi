@@ -40,7 +40,7 @@ router.get('/getPopularInfoById', auth, rootAdmin, async (ctx, next) => {
   //验证参数
   const v = await new AddShortIdValidator().validate(ctx)
   //获取参数
-  const { id } = ctx.request.body
+  const { id } = ctx.query
   // 删除方法
   ctx.body = await getPopularInfo(id)
 })

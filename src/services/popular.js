@@ -150,7 +150,10 @@ const updatePopInfo = async ({ popId, addType, bgImage, title, resources, conten
     where: whereOpt
   })
   console.log(result)
-  return result
+  if(result){
+    return '更新成功'
+  }
+  
 }
 
 /**

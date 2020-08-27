@@ -88,6 +88,7 @@ const deletePopular = async (id, ctx) => {
  * @param {number} id popularID
  */
 const getPopularInfo = async (id) => {
+  debugger
   const result = await getPopInfo(id)
   if (result) {
     return new SuccessModel(result)
@@ -109,7 +110,7 @@ const updatePopular = async ({ popId, addType, bgImage, title, resources, conten
   debugger
   const result = await updatePopInfo({ popId, addType, bgImage, title, resources, content, creationTime })
   if (result) {
-    return new SuccessModel({msg:'更新成功'})
+    return new SuccessModel(result)
   }
   throw new ErrorModel(errorInfo.popularCreateFile)
 }

@@ -67,6 +67,10 @@ const delFile = async (ctx, reservePath) => {
   const deleteFolder = deletePath.split("\\upload.")[0]
   const readDir = fse.readdirSync(deleteFolder)
   if (readDir.length > 0) {
+    var isExist = fse.existsSync( deletePath ) 
+    if(!isExist){
+      return
+    }
     fse.unlinkSync(deletePath)
     const delDir = fse.readdirSync(deleteFolder)
     if (delDir.length == 0) {
