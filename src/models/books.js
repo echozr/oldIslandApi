@@ -12,7 +12,7 @@ const books = seq.define('book', {
     comment: '标题'
   },
   content: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT('long'),
     comment: '内容'
   },
   addType: {

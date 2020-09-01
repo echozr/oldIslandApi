@@ -50,16 +50,8 @@ const addPopular = async ({ addType, bgImage, title, resources, content, creatio
  */
 const getAdminPopList = async ({title, type, time, start, count }) => {
   debugger
-  if (start === "" || start === undefined) {
-    start = 0
-  }else{
-    start=Number(start)
-  }
-  if (count === "" || count === undefined) {
-    count = 10
-  }else{
-    count=Number(count)
-  }
+  start === "" || start === undefined ? start = 0 : start = Number(start)
+  count === "" || count === undefined ? count = 10 : count = Number(count)
   const result = await findPopList({title, type, time, start, count })
   if (result) {
     return new SuccessModel(result)

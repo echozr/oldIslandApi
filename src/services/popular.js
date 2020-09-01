@@ -6,7 +6,7 @@ const sequelize = require('sequelize')
 const { popular, praise } = require('../models')
 const { delFile } = require('../controllers/upload')
 const {ErrorModel} = require('../core/http-exception')
-const Op = sequelize.Op;
+const Op = sequelize.Op
 
 /**
  * 创建popular除书籍外的所有数据

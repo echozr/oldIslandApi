@@ -46,7 +46,6 @@ router.get('/getPopularInfoById', auth, rootAdmin, async (ctx, next) => {
 })
 
 // 更新update
-
 router.post('/updatePopular', auth, rootAdmin, async (ctx, next) => {
   //验证参数
   const v = await new addPoplar().validate(ctx)

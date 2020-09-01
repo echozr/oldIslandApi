@@ -46,5 +46,17 @@ module.exports = errorInfo = {
   cancelPraiseFail:{
     msg:'取消失败，请重试',
     errorCode:40002
+  },
+  getBookListFail:{
+    msg:'获取书籍列表失败',
+    errorCode:40003
+  },
+  getBookInfoFail:{
+    msg:'获取书籍详情失败',
+    errorCode:40004
+  },
+  bookUpdateFail:{
+    msg:'更新书籍失败',
+    errorCode:40004
   }
 }
