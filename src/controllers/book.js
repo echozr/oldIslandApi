@@ -4,7 +4,7 @@
  */
 const { SuccessModel, ErrorModel } = require("../core/http-exception")
 const errorInfo = require("../lib/errorInfo")
-const { createBooks, destroyBooks , findBookList, getBookInfo, updateBookInfo } = require("../services/book")
+const { createBooks, destroyBooks , findBookList, getBookInfo, updateBookInfo, addBookDiscuss } = require("../services/book")
 
 /**
  * 新增书籍
@@ -49,8 +49,9 @@ const getBookList = async (title, count, start, ctx) => {
  * 根据ID获取书籍详情
  * @param {number} id 书籍ID
  */
-const getBookInfoById = async (id) =>{
-  const result = await getBookInfo(id)
+const getBookInfoById = async (id,ctx) =>{
+  const userId=ctx.state.user.uid
+  const result = await getBookInfo(id,userId)
   if(result){
     return new SuccessModel(result)
   }
@@ -68,10 +69,29 @@ const updateBook = async({id, title, content, addType, creationTime, bgImage, au
   }
   throw new ErrorModel(errorInfo.bookUpdateFail)
 }
+
+/**
+ * 小程序端增加短评
+ * @param {number} bookId  书籍ID 
+ * @param {string} content    
+ * @param {object} ctx 
+ */
+const addDiscuss = async(bookId,content,ctx)=>{
+  debugger
+  const userId=ctx.state.user.uid
+  const result=await addBookDiscuss(bookId,content,userId)
+  if(result){
+    return new SuccessModel(result)
+  }
+  throw new ErrorModel(errorInfo.addBookDiscussFail)
+
+}
+
 module.exports = {
   addBooks,
   deleteBooks,
   getBookList,
   getBookInfoById,
-  updateBook
+  updateBook,
+  addDiscuss
 }

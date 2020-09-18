@@ -4,7 +4,7 @@
  */
 
 const sequelize = require('sequelize')
-const { praise, popular, books ,bookPraise} = require('../models')
+const { books, bookPraise, bookDiscuss } = require('../models')
 const { ErrorModel } = require('../core/http-exception')
 const { delFile } = require('../controllers/upload')
 const Op = sequelize.Op
@@ -87,20 +87,29 @@ const findBookList = async (title, count, start, userId) => {
     order: [
       ['id', 'desc']
     ],
-    attributes: ['id', 'title', 'content', 'addType', 'creationTime','bgImage', 'author', 'publicHouse', 'bookType', 'pages'],
+    attributes: ['id', 'title', 'content', 'addType', 'creationTime', 'bgImage', 'author', 'publicHouse', 'bookType', 'pages'],
     include: [
       {
         model: bookPraise,
         attributes: ['userId', 'bookId']
+      },
+      {
+        model:bookDiscuss,
+        attributes: ['content', 'num']
       }
     ]
   })
+  let sum=0
   const list = result.rows.map(v => {
     const item = v.dataValues
     const praiseNum = item.bookPraises.length
-    const isCheck = item.bookPraises.filter(x => x.dataValues.userId === userId)
+    const discussNum= item.bookDiscusses.map(v => v.dataValues.num)
+    debugger
+    for(let i in discussNum){
+      sum=sum+discussNum[i]
+    }
+    v.dataValues.bookDiscusses = sum
     v.dataValues.bookPraises = praiseNum
-    v.dataValues.isCheck = isCheck.length > 0 ? true : false
     return v.dataValues
   })
   
@@ -116,22 +125,41 @@ const findBookList = async (title, count, start, userId) => {
  * 根据ID获取书籍详情
  * @param {number} id 书籍ID
  */
-const getBookInfo = async (id) => {
+const getBookInfo = async (id,userId) => {
   const whereOpt = {
     id
   }
-  const result = await books.findOne({
-    where: whereOpt
+  const result = await books.findAndCountAll({
+    where: whereOpt,
+    include: [
+      {
+        model: bookPraise,
+        attributes: ['userId', 'bookId']
+      },
+      {
+        model:bookDiscuss,
+        attributes: ['content', 'num']
+      }
+    ]
   })
-  console.log(result)
-  return result
+  const list = result.rows.map(v => {
+    const item = v.dataValues
+    const praiseNum = item.bookPraises.length
+    const isCheck = item.bookPraises.filter(x => x.dataValues.userId === userId)
+    v.dataValues.bookPraises = praiseNum
+    v.dataValues.isCheck = isCheck.length > 0 ? true : false
+    return v.dataValues
+  })
+
+  console.log( list[0])
+  return list[0]
 }
 /**
  * 更新book详情数据
  * @param {object} object  id, title, content, addType, creationTime, bgImage, author, publicHouse, PublicYear, pages, pricing, bookType 
  */
 const updateBookInfo = async ({ id, title, content, addType, creationTime, bgImage, author, publicHouse, PublicYear, pages, pricing, bookType }) => {
- debugger
+  debugger
   const whereOpt = {
     id
   }
@@ -157,10 +185,41 @@ const updateBookInfo = async ({ id, title, content, addType, creationTime, bgIma
   }
 }
 
+/**
+ * 添加书籍短评
+ * @param {string} title 书籍名称
+ * @param {number} count 页数
+ * @param {number} start 页码
+ */
+const addBookDiscuss = async (bookId, content, userId) => {
+  debugger
+  // 判断此书时候有该短评
+  const discuss = await bookDiscuss.findOne({
+    where: {
+      bookId,
+      content
+    }
+  })
+  if (discuss) {
+    return await discuss.increment('num', { by: 1 })
+  } else {
+  return await bookDiscuss.create(
+      {
+        bookId,
+        content,
+        num:1,
+        userId
+      }
+    )
+  }
+
+}
+
 module.exports = {
   createBooks,
   destroyBooks,
   findBookList,
   getBookInfo,
-  updateBookInfo
+  updateBookInfo,
+  addBookDiscuss
 }

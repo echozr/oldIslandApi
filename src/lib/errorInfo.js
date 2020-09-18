@@ -58,5 +58,9 @@ module.exports = errorInfo = {
   bookUpdateFail:{
     msg:'更新书籍失败',
     errorCode:40004
+  },
+  addBookDiscussFail:{
+    msg:'添加书籍短评失败',
+    errorCode:40004
   }
 }

@@ -72,8 +72,8 @@ class addPoplar extends LinValidator{
     this.addType=[new Rule('isLength','类型不能为空')]
     this.creationTime=[new Rule('isLength','创建时间不能为空')]
     this.bgImage=[new Rule('isLength','背景图不能为空')]
-    this.title=[new Rule('isLength','标题长度必须要大于2个字，小于30个字',{min:2,max:30})]
-    this.content=[new Rule('isLength','内容长度必须要大于10个子,小于200个字',{min:5,max:200})]
+    this.title=[new Rule('isLength','标题长度必须要大于1个字，小于30个字',{min:1,max:30})]
+    this.content=[new Rule('isLength','内容长度必须要大于1个子,小于200个字',{min:1,max:200})]
   }
 }
 /**
@@ -148,6 +148,13 @@ class addBook extends addPoplar{
   }
 }
 
+class addDiscussValidate extends AddShortIdValidator{
+  constructor(){
+    super()
+    this.content=[new Rule('isLength','内容长度大于1小于12',{min:1,max:12})]
+  }
+}
+
 module.exports = {
   positiveIntegerValidator,
   RegisterValidator,
@@ -157,5 +164,6 @@ module.exports = {
   AddShortIdValidator,
   PraiseValidator,
   PraiseTypeValidator,
-  addBook
+  addBook,
+  addDiscussValidate
 }

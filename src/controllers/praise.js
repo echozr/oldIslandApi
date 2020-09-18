@@ -45,19 +45,7 @@ const cancelLike = async (ctx, type, popularId) => {
  */
 const getPraiseList = async (ctx, type) => {
   const userId = ctx.state.user.uid
-  let result
-  switch (Number(type)) {
-    case ArtType.BOOK:
-      // 查询书籍表
-      break
-    case ArtType.MUSIC:
-    case ArtType.SENTENCE:
-    case ArtType.VIDEO:
-    case ArtType.MOVIE:
-      // 查询期刊表
-      result=await findPraiseList(userId,type)
-      break
-  }
+  const result=await findPraiseList(userId,type)
   if(result){
     return new SuccessModel(result)
   }

@@ -168,6 +168,7 @@ const findAppLetsPopList = async (time, userId) => {
     Object.assign(whereOpt, { creationTime: time })
   } else {
     const newTime = await popular.findOne({ order: [['creationTime', 'DESC']] })
+    console.log(newTime)
     const startTime = newTime.dataValues.creationTime
     Object.assign(whereOpt, { creationTime: startTime })
   }

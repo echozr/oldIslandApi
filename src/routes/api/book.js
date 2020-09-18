@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const { auth, rootAdmin } = require('../../middleWares/auth')
-const { addBook, AddShortIdValidator } = require('../../validators')
-const { addBooks, deleteBooks, getBookList, getBookInfoById, updateBook } = require('../../controllers/book')
+const { addBook, AddShortIdValidator,addDiscussValidate } = require('../../validators')
+const { addBooks, deleteBooks, getBookList, getBookInfoById, updateBook,addDiscuss } = require('../../controllers/book')
 const router = new Router({ prefix: '/books' })
 
 // 添加书籍
@@ -39,7 +39,7 @@ router.get('/getBookInfoByID', auth, async (ctx, next) => {
   // 获取参数
   const { id } = ctx.query
   // 调用controller
-  ctx.body = await getBookInfoById(id)
+  ctx.body = await getBookInfoById(id,ctx)
 })
 
 // 更新数据详情
@@ -54,4 +54,15 @@ router.post('/updateBook',auth,rootAdmin,async(ctx,next)=>{
   ctx.body = await updateBook({id, title, content, addType, creationTime, bgImage, author, publicHouse, PublicYear, pages, pricing, bookType })
 })
 
+// 小程序端
+
+// 书籍短评
+router.post ('/addDiscuss',auth, async(ctx,next)=>{
+  // 参数验证
+  debugger
+  const v = await new addDiscussValidate().validate(ctx)
+  const {id:bookId,content}=ctx.request.body
+  ctx.body= await addDiscuss(bookId,content,ctx)
+  
+})
 module.exports = router

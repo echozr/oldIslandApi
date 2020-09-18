@@ -18,7 +18,7 @@ const createPraise = async (userId, type, popularId) => {
   if (type === 400 || type === '400') {
     isCheck = await bookPraise.findAll({
       where: {
-        userId, type, bookId:popularId
+        userId, type, bookId: popularId
       }
     })
   } else {
@@ -35,9 +35,9 @@ const createPraise = async (userId, type, popularId) => {
     result = await bookPraise.create({
       userId,
       type,
-      bookId:popularId
+      bookId: popularId
     })
-  }else{
+  } else {
     result = await praise.create({
       userId,
       type,
@@ -55,15 +55,23 @@ const createPraise = async (userId, type, popularId) => {
  * @param {number} popularId 期刊ID
  */
 const deletePraise = async (userId, type, popularId) => {
-  const result = await praise.destroy({
-    where: {
-      userId,
-      type,
-      popularId
-    }
-  })
-  console.log(result)
-  return result
+  if (type === 400 || type === '400') {
+    return await bookPraise.destroy({
+      where: {
+        userId,
+        type,
+        bookId: popularId
+      }
+    })
+  } else {
+    return await praise.destroy({
+      where: {
+        userId,
+        type,
+        popularId
+      }
+    })
+  }
 }
 /**
  * 根据用户获取她喜欢的期刊
