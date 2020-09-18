@@ -12,8 +12,8 @@ const LoginType = {
 
 const ArtType = {
   MOVIE: 100,
-  MUSIC: 200,
-  SENTENCE: 300,
+  MUSIC: 300,
+  SENTENCE: 200,
   VIDEO:500,
   BOOK: 400,
   isThisType

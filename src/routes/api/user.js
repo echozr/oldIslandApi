@@ -19,6 +19,7 @@ router.post('/login', async (ctx, next) => {
   const v= await new LoginValidator().validate(ctx)
   // 获取参数
   const {account,password,type}=v.get('body')
+  debugger
   // 获取返回结果
   ctx.body = await LoginByType({account,password,type})
 })

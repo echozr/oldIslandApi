@@ -4,7 +4,7 @@
  */
 
 const sequelize = require('sequelize')
-const { praise, popular, books } = require('../models')
+const { praise, popular, books ,bookPraise} = require('../models')
 const { ErrorModel } = require('../core/http-exception')
 const { delFile } = require('../controllers/upload')
 const Op = sequelize.Op
@@ -74,7 +74,7 @@ const destroyBooks = async (id, ctx) => {
  * @param {number} count 页数
  * @param {number} start 页码
  */
-const findBookList = async (title, count, start) => {
+const findBookList = async (title, count, start, userId) => {
   debugger
   const whereOpt = {}
   if (title) {
@@ -87,10 +87,23 @@ const findBookList = async (title, count, start) => {
     order: [
       ['id', 'desc']
     ],
-    attributes: ['id', 'title', 'content', 'addType', 'creationTime', 'author', 'publicHouse', 'bookType', 'pages'],
+    attributes: ['id', 'title', 'content', 'addType', 'creationTime','bgImage', 'author', 'publicHouse', 'bookType', 'pages'],
+    include: [
+      {
+        model: bookPraise,
+        attributes: ['userId', 'bookId']
+      }
+    ]
   })
-  console.log(result)
-  const list = result.rows.map(v => v.dataValues)
+  const list = result.rows.map(v => {
+    const item = v.dataValues
+    const praiseNum = item.bookPraises.length
+    const isCheck = item.bookPraises.filter(x => x.dataValues.userId === userId)
+    v.dataValues.bookPraises = praiseNum
+    v.dataValues.isCheck = isCheck.length > 0 ? true : false
+    return v.dataValues
+  })
+  
   return {
     total: result.count,
     list,

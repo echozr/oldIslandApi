@@ -8,6 +8,7 @@ const { getUserByInfo, addUser, emailLogin } = require('../services/users')
 const { generateToken } = require('../core/jwt')
 const { LoginType } = require('../lib/enum')
 const errorInfo = require('../lib/errorInfo')
+const {getWxToken} =require('../services/weixin')
 /**
  * 根据邮箱或openId查询用户
  * @param {string} email 邮箱号 
@@ -50,6 +51,7 @@ const resisterUser = async ({ email, password, nickname }) => {
  * @param {string} type  登录的类型
  */
 const LoginByType = async ({ account, password, type }) => {
+  debugger
   let Token
   switch (Number(type)) {
     case LoginType.USER_EMAIL:
@@ -61,12 +63,13 @@ const LoginByType = async ({ account, password, type }) => {
       Token = generateToken(user.id, 10)
       break;
     case LoginType.USER_MINI_PROGRAM:
-      return Token = 'A'
+      Token =await getWxToken(account, 2)
       break
     default:
       throw new ErrorModel({ "msg": "没有响应的处理函数" })
       break;
   }
+  console.log(Token)
   return new SuccessModel(Token)
 
 

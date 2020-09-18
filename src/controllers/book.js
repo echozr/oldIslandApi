@@ -35,10 +35,11 @@ const deleteBooks = async (id, ctx) => {
  * @param {number} count 页数
  * @param {number} start 页码
  */
-const getBookList = async (title, count, start) => {
+const getBookList = async (title, count, start, ctx) => {
   start === "" || start === undefined ? start = 0 : start = Number(start)
   count === "" || count === undefined ? count = 10 : count = Number(count)
-  const result = await findBookList(title, count, start)
+  const userId = ctx.state.user.uid
+  const result = await findBookList(title, count, start, userId)
   if(result){
     return new SuccessModel(result)
   }

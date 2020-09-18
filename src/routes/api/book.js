@@ -25,11 +25,11 @@ router.delete('/deleteBooks', auth, rootAdmin, async (ctx, next) => {
 })
 
 // 获取书籍列表
-router.get('/getBookList', auth, rootAdmin, async (ctx, next) => {
+router.get('/getBookList', auth, async (ctx, next) => {
   // 获取参数
   debugger
   const { title, count, start } = ctx.query
-  ctx.body = await getBookList(title, count, start)
+  ctx.body = await getBookList(title, count, start, ctx)
 })
 
 // 根据Id获取书籍详情

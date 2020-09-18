@@ -3,7 +3,7 @@
  * @author zr
  */
 const sequelize = require('sequelize')
-const { praise, popular, books } = require('../models')
+const { praise, popular, books, bookPraise } = require('../models')
 
 /**
  * 添加点赞功能
@@ -13,19 +13,37 @@ const { praise, popular, books } = require('../models')
  */
 const createPraise = async (userId, type, popularId) => {
   debugger
-  const isCheck = await praise.findAll({
-    where: {
-      userId, type, popularId
-    }
-  })
+  let isCheck
+  let result
+  if (type === 400 || type === '400') {
+    isCheck = await bookPraise.findAll({
+      where: {
+        userId, type, bookId:popularId
+      }
+    })
+  } else {
+    isCheck = await praise.findAll({
+      where: {
+        userId, type, popularId
+      }
+    })
+  }
   if (isCheck.length > 0) {
     return '已经点过赞'
   }
-  const result = await praise.create({
-    userId,
-    type,
-    popularId
-  })
+  if (type === 400 || type === '400') {
+    result = await bookPraise.create({
+      userId,
+      type,
+      bookId:popularId
+    })
+  }else{
+    result = await praise.create({
+      userId,
+      type,
+      popularId
+    })
+  }
   console.log(result)
   return result
 }
@@ -76,7 +94,7 @@ const findPraiseList = async (userId, type) => {
     const praiseNum = item.praises.length
     const isCheck = item.praises.filter(x => x.dataValues.userId === userId)
     return {
-      popularId:v.dataValues.popularId,
+      popularId: v.dataValues.popularId,
       Type: item.addType,
       bgImage: item.bgImage,
       title: item.title,

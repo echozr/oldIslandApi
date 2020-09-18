@@ -8,6 +8,7 @@ const users = require('./users')
 const popular= require('./popular')
 const books=require('./books')
 const praise= require('./praise')
+const bookPraise = require('./bookPraise')
 
 
 // 外键关系
@@ -22,7 +23,14 @@ popular.hasMany(praise,{
   foreignKey: 'popularId'
 })
 
-books.hasMany(praise,{
+bookPraise.belongsTo(users,{
+  foreignKey: 'userId'
+})
+
+bookPraise.belongsTo(books,{
+  foreignKey:'bookId'
+})
+books.hasMany(bookPraise,{
   foreignKey: 'bookId'
 })
 
@@ -32,5 +40,6 @@ module.exports = {
   users,
   popular,
   books,
-  praise
+  praise,
+  bookPraise
 }
