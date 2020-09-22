@@ -30,7 +30,7 @@ router.get('/getPraiseList', auth, async (ctx, next) => {
   // 参数验证
   const v = await new PraiseTypeValidator().validate(ctx)
   // 获取参数
-  const { type } = ctx.request.body
+  const { type } = ctx.query
   // 调用控制器方法
   ctx.body = await getPraiseList(ctx, type)
 })
