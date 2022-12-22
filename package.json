@@ -23,7 +23,7 @@
     "bcryptjs": "^2.4.3",
     "formidable-upload-koa": "^1.0.1",
     "fs-extra": "^9.0.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
